@@ -1,0 +1,33 @@
+/**
+Line du menu 
+*/
+.ent-lien{
+    background-color: #010202;
+}
+/** Ligne pair des tableau */
+table.dataTable tbody tr:nth-child(2n){
+    background-color: #c4e3f3;
+}
+
+table.dataTable tbody tr:hover{
+    background-color: #a1cffc;
+}
+/** PAGE D'ACCUEIL */
+.page #indexPage fieldset{
+    float: none !important;
+    display: inline-table;
+    background-image:-webkit-linear-gradient(right, #c2defa 30%, #e4effa 100%);
+    background-image: -o-linear-gradient(right, #c2defa 30%, #e4effa 100%);
+    background-image: -moz-linear-gradient(right, #c2defa 30%, #e4effa 100%);
+    background-image: linear-gradient(right, #c2defa 30%, #e4effa 100%);
+}
+
+
+.page #indexPage span{
+    display: block;
+    text-align: center; 
+    margin-bottom: 5px;
+}
+.page #indexPage h2{
+    font-family: "Arial";
+}

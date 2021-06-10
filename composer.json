@@ -1,0 +1,11 @@
+{
+    "require": {
+        "phpoffice/phpspreadsheet": "^1.4",
+        "google/cloud": "^0.101.1",
+        "grpc/grpc": "^1.19",
+        "moontoast/math": "^1.1"
+    },
+    "config": {
+        "disable-tls": true
+    }
+}
