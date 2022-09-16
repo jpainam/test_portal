@@ -1,8 +1,0 @@
-﻿- Ajout du champ freresoeur dans la table eleve BD
-- Ajout de la colonne RESIDENCE dans  la table eleve BD
-- Definition de l'IPW comme etablissement numero 1 dans public/index
-- Ajout de la colonne REALISERPAR dans inscription
-- Ouverture du port mysql 3306 a travers le firewall pour permettre l'execution de mysqldump,
-- Ajouter tous les user avec la commande Grant all, regarder les comments du tutoriel das gestionacad/404_forbidden
-
-- Ajout colonne ENREGISTRERPAR dans eleves et modification du code de saisie des eleves dans eleveController
