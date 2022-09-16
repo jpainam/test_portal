@@ -8,11 +8,13 @@ class DateFR {
     private $strtime;  //Date sous forme de chaine renvoyer par strtotime();
     private $jrsFR;
     private $moisFR;
+	private $originaldate;
 
     function __construct($date = "") {
         if (empty($date)) {
             $date = date("Y-m-d", time());
         }
+		$this->originaldate = $date;
         $this->strtime = strtotime($date);
         $this->jrsFR = array("Mon" => "Lundi", "Tue" => "Mardi", "Wed" => "Mercredi", "Thu" => "Jeudi", "Fri" => "Vendredi", "Sat" => "Samedi", "Sun" => "Dimanche");
         $this->moisFR = array("1" => "Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Decembre");
@@ -70,7 +72,10 @@ class DateFR {
      * @return type
      */
     function getTime() {
-        return date("H:i", $this->strtime);
+		if (strcmp(date("H:i", $this->strtime), "00:00")) {
+			return date("H:i", $this->strtime);
+		}
+		return "12:00";
     }
 
     /**
@@ -86,6 +91,7 @@ class DateFR {
         $this->year = date("Y", $this->strtime);
         $this->month = date("n", $this->strtime);
         $this->day = date("D", $this->strtime);
+		$this->originaldate = $date;
     }
 
     /**

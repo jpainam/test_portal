@@ -6,7 +6,9 @@
             <span id="prof-principal"></span></span> 
             <span  style="margin: 0; font-weight: bold;"><?php echo __t("CPE. Principal"); ?>: <span id="cpe-principal"></span></span>
             <span class="text" style="margin-top:0;margin-left: 2px; clear: both; width: 197px;font-weight: bold"><?php echo __t("Effectif"); ?>: 
-            <span id="effectif">00</span></span>
+				<span id="effectif">00</span>
+				&nbsp;&nbsp;&nbsp;Nouveaux:&nbsp;<span id="nouveauxeleves">00</span>
+			</span>
             <span class="text" style="width: 300px;margin: 0;font-weight: bold"><?php echo __t("Responsable Admin."); ?> : 
             <span id="resp-admin"></span></span>
 
@@ -65,8 +67,8 @@ if(isAuth(220)){
                  </li>
                   <li id="tab5" class="noncourant">
                      <a onclick="onglets(1, 5, <?php echo $_maxnbre; ?>);">
-                         <img border ="0" alt="" src="<?php echo SITE_ROOT . "public/img/icons/manuelscolaire.png"; ?>" />
-                            <?php echo __t("Manuels Scolaires"); ?></a>
+                         <img border ="0" alt="" src="<?php echo SITE_ROOT . "public/img/icons/individuel.png"; ?>" />
+                            <?php echo __t("Nouveaux élèves"); ?></a>
                  </li>
                 <?php if (isAuth(220)) { ?>
                     <li id="tab6" class="noncourant"><a onclick="onglets(1, 6, <?php echo $_maxnbre; ?>);">
@@ -99,6 +101,7 @@ if(isAuth(220)){
             <select onchange="imprimer();" name = "code_impression">
                 <option></option>
                 <option value="0001"><?php echo __t("Liste des &eacute;l&egrave;ves"); ?></option>
+                <option value="0011">Listes des nouveaux élèves</option>
                 <option value="0009"><?php echo __t("Liste des matières"); ?></option>
                 <?php
                 if (isAuth(220)) {

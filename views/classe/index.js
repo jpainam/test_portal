@@ -25,7 +25,10 @@ chargerDonnees = function () {
             $("#resp-admin").html(result[6]);
             $("#effectif").html(result[7]);
             $("#total-frais").html(result[8]);
-            $("#onglet5").html(result[10]);
+            //$("#onglet5").html(result[10]);
+            $("#nouveauxeleves").html(result[11]);
+            $("#onglet5").html(result[12]);
+			
         },
         error: function (xhr, status, error) {
             console.log(xhr.responseText);

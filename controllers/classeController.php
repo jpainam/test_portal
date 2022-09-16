@@ -37,6 +37,7 @@ class classeController extends Controller {
         $this->loadModel("bulletin");
         $this->loadModel("compteeleve");
         $this->loadModel("manuelscolaire");
+        $this->loadModel("etablissement");
     }
 
     public function index() {
@@ -114,6 +115,18 @@ class classeController extends Controller {
         $view->Assign("nb_sync_manuels", $nb);
         $view->Assign("manuels", $manuels);
         $json[10] = $view->Render("classe" . DS . "ajax" . DS . "onglet6", false);
+        # Nouveaux eleves
+        $nouveauxeleves = $this->Etablissement->getNouveauEleves();
+        $nouveaux = array();
+        foreach ($nouveauxeleves as $el) {
+            if($el["IDCLASSE"] == $this->request->idclasse){
+                array_push($nouveaux, $el);
+            }
+        }
+        $nbnouveauxeleves = count($nouveaux);
+        $json[11] = $nbnouveauxeleves;
+        $view->Assign("nouveaux", $nouveaux);
+        $json[12] = $view->Render("classe" . DS . "ajax" . DS . "onglet7", false);
         echo json_encode($json);
     }
 
@@ -564,6 +577,8 @@ class classeController extends Controller {
             case "0001":
                 # Renvoyer un tableau contenant les id des eleve redoublant
                 $view->Assign("eleves", $eleves);
+                $nouveauxeleves = $this->Classe->getAnciensEleves($this->request->idclasse);
+                $view->Assign("nouveauxeleves", $nouveauxeleves);
                 if ($type == "pdf") {
                     echo $view->Render("classe" . DS . "impression" . DS . "listesimpleeleves", false);
                 } elseif ($type == "excel") {
@@ -660,6 +675,21 @@ class classeController extends Controller {
                     echo $view->Render("classe" . DS . "impression" . DS . "listemanuelscolaire", false);
                 } elseif ($type == "excel") {
                     echo $view->Render("classe" . DS . "xls" . DS . "listemanuelscolaire", false);
+                }
+                break;
+            case "0011":
+                $nouveaux = array();
+                $nouveauxeleves = $this->Etablissement->getNouveauEleves();
+                foreach ($nouveauxeleves as $el) {
+                    if($el["IDCLASSE"] == $classe["IDCLASSE"]){
+                        array_push($nouveaux, $el);
+                    }
+                }
+                $view->Assign("nouveaux", $nouveaux);
+                if ($type == "pdf") {
+                    echo $view->Render("classe" . DS . "impression" . DS . "nouveaueleve", false);
+                } elseif ($type == "excel") {
+                    echo $view->Render("classe" . DS . "xls" . DS . "nouveaueleve", false);
                 }
                 break;
         }

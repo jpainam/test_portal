@@ -22,6 +22,8 @@ class PDF extends TCPDF {
         parent::__construct($orientation, $unit, $format, true, 'UTF-8', false);
         $this->fontpath = SITE_ROOT . "library/tcpdf/fonts";
 
+        //TCPDF_FONTS::addTTFfont(SITE_ROOT . 'public/fonts/AlgerianRegular.ttf', 'TrueTypeUnicode', '', 96);
+        
 
         # set default monospaced font
         $this->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);

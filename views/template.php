@@ -21,7 +21,8 @@
         echo $css;
         }
         # <script type="text/javascript" src="<?php echo SITE_ROOT; public/js/jquery.datetimepicker.js"></script>
-        ?><script type="text/javascript" src="<?php echo SITE_ROOT; ?>public/js/jquery-1.11.2.min.js"></script>
+        ?>
+		<script type="text/javascript" src="<?php echo SITE_ROOT; ?>public/js/jquery-1.11.2.min.js"></script>
         <script src="<?php echo SITE_ROOT; ?>public/js/select2.min.js"></script>
         <script src="<?php echo SITE_ROOT; ?>public/js/jquery.ui.timepicker.js"></script>
         <script type="text/javascript" src="<?php echo SITE_ROOT; ?>public/js/scripts.js"></script>

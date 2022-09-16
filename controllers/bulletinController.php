@@ -32,20 +32,6 @@ class bulletinController extends Controller {
         
     }
 
-    public function imprimer() {
-        parent::printable();
-
-        switch ($this->request->code) {
-            case "0001":
-                $this->bulletin();
-                break;
-            case "0002":
-                $this->annuelle();
-                break;
-            case "0003":
-                break;
-        }
-    }
 
     public function trimestre(&$view, $idclasse, $idperiode) {
         $trimestre = $this->Trimestre->get($idperiode);
@@ -322,10 +308,21 @@ class bulletinController extends Controller {
     }
 
     public function impression() {
-
         if (!empty($this->request->comboClasses)) {
-            $this->imprimer();
+            // lors du deuxieme appel, imprimer le bulletin
+            parent::printable();
+            switch ($this->request->code) {
+                case "0001":
+                    $this->bulletin();
+                    break;
+                case "0002":
+                    $this->annuelle();
+                    break;
+                case "0003":
+                    break;
+            }
         }
+        // Lors du premier appel, affichier la vue
         $view = new View();
         $this->view->clientsJS("bulletin" . DS . "impression");
         $this->comboClasses->first = " ";
@@ -352,6 +349,50 @@ class bulletinController extends Controller {
         }
 
         echo json_encode($json);
+    }
+
+    public function imprimer(){
+        parent::printable();
+        $action = $this->request->code;
+        #$type = $this->request->type_impression;
+        $view = new View();
+        $view->Assign("pdf", $this->pdf);
+        $idclasse = $this->request->comboClasses;
+        switch($action){
+            // Imprimer le tableau d'honneur annuel
+            case "0001":
+                $classe = $this->Classe->get($idclasse);
+                $view->Assign("classe", $classe);
+                $inscrits = $this->Inscription->getInscrits($idclasse);
+                $view->Assign("effectif", count($inscrits));
+                $view->Assign("eleves", $inscrits);
+                $sequences = $this->Sequence->getIdSequences($_SESSION['anneeacademique']);
+                
+                # Obtenir les moyennes sequentielles
+                $this->Bulletin->createMoySequentielTable();
+                foreach ($sequences as $seq) {
+                    $this->getMoyRangSequentiel($idclasse, $seq);
+                }
+                $rangsequentiels = $this->Bulletin->getRangMoyenneSequences($sequences);
+                $this->Bulletin->dropMoySequentielTable();
+                $this->Bulletin->createAnnuelleTable($idclasse, $sequences);
+                $rangs = $this->Bulletin->getElevesRangAnnuel();
+                $moyclasse = $moymax = $moymin = 0;
+                setrangannuel($rangs, $rangsequentiels, $moyclasse, $moymax, $moymin);
+                $view->Assign("rangs", $rangs);
+                $modelSchool = new locanModel();
+                $school = $modelSchool->get(INSTITUTION_CODE);
+                $logo = SITE_ROOT . "public/img/" . $school['LOGO'];
+                $view->Assign('logo', $logo);
+                #if ($type == "pdf") {
+                    $this->pdf->isLandscape = true;
+                    $this->pdf->bCertify = false;
+                    echo $view->Render("bulletin" . DS . "impression" . DS . "tableaudhonneur", false);
+                #} elseif ($type == "excel") {
+                #    echo $view->Render("bulletin" . DS . "xls" . DS . "tableaudhonneur", false);
+                #}
+            break;
+        }
     }
 
 }

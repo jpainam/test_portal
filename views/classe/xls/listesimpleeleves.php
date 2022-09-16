@@ -30,15 +30,20 @@ $sheet->setCellValue("A2", "N°")
         ->setCellValue("G2", "Sexe")
         ->setCellValue("H2", "Lieu de Naissance")
         ->setCellValue("I2", "Provenance")
-        ->setCellValue("J2", "Résidence");
-$sheet->getStyle("A1:J2")->getFont()->setBold(true);
-$sheet->getStyle('A2:J2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
+        ->setCellValue("J2", "Résidence")
+        ->setCellValue("K2", "Nouveau");
+		
+$sheet->getStyle("A1:K2")->getFont()->setBold(true);
+$sheet->getStyle('A2:K2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
 
-$sheet->getStyle('A2:J2')->getFill()->getStartColor()->setARGB('FFC4BD97');
+$sheet->getStyle('A2:K2')->getFill()->getStartColor()->setARGB('FFC4BD97');
 
 
 if (!is_array($array_of_redoublants)) {
     $array_of_redoublants = array();
+}
+if (!is_array($nouveauxeleves)) {
+	$nouveauxeleves = array();
 }
 $i = 3;
 $j = 1;
@@ -47,6 +52,11 @@ foreach ($eleves as $el) {
         $redoublant = "OUI";
     } else {
         $redoublant = "NON";
+    }
+	if (in_array($el['IDELEVE'], $nouveauxeleves)) {
+        $nouveau = "NON";
+    } else {
+        $nouveau = "OUI";
     }
 
     $sheet->setCellValue('A' . $i, $j)
@@ -59,12 +69,13 @@ foreach ($eleves as $el) {
             ->setCellValue("H" . $i, $el['LIEUNAISS'])
             ->setCellValue("I" . $i, $el['FK_PROVENANCE'])
             ->setCellValue("J" . $i, $el['RESIDENCE'])
+            ->setCellValue("K" . $i, $nouveau)
             ;
     $i++;
     $j++;
 }
 
-setAutoSize($sheet, ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]);
+setAutoSize($sheet, ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"]);
 $sheet->setTitle("Liste des Eleves");
 $spreadsheet->setActiveSheetIndex(0);
 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');

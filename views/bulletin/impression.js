@@ -26,7 +26,7 @@ var chargerEleves = function () {
     });
 };
 
-function impression() {
+function impressionBulletin() {
     removeRequiredFields([$("select[name=comboClasses]"), $("select[name=comboPeriodes]")]);
     if ($("select[name=comboClasses]").val() === "" || $("select[name=comboPeriodes]").val() === "") {
         addRequiredFields([$("select[name=comboClasses]"), $("select[name=comboPeriodes]")]);
@@ -76,4 +76,29 @@ function synchroniserBulletins(){
             console.log(xhr.responseText);
         }
     });
+}
+function imprimer() {
+    if ($("select[name=code_impression]").val() === "") {
+        return;
+    }
+    removeRequiredFields([$("select[name=comboClasses]"), $("select[name=comboPeriodes]")]);
+    if ($("select[name=comboClasses]").val() === "" || $("select[name=comboPeriodes]").val() === "") {
+        addRequiredFields([$("select[name=comboClasses]"), $("select[name=comboPeriodes]")]);
+        alertWebix(__t("Veuillez remplir les champs obligatoires"));
+        return;
+    }
+    var frm = $("<form>", {
+        action: "./imprimer",
+        target: "_blank",
+        method: "post"
+    }).append($("<input>", {
+        name: "code",
+        type: "hidden",
+        value: $("select[name=code_impression]").val()
+    })).append($("<input>", {
+        name: "comboClasses",
+        type: "hidden",
+        value: $("select[name=comboClasses]").val()
+    })).appendTo("body");
+    frm.submit();
 }

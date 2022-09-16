@@ -325,4 +325,12 @@ class classeModel extends Model {
             "par" => $par
         ));
     }
+	
+	
+    public function getAnciensEleves($idclasse){
+        $query = "SELECT DISTINCT(i.IDELEVE) FROM inscription i WHERE i.ANNEEACADEMIQUE < :anneeacad";
+        return $this->query($query, array(
+            "anneeacad" => $_SESSION['anneeacademique']
+        ));
+    }
 }

@@ -394,9 +394,9 @@ class bulletinModel extends Model {
 
         $query = "SELECT IDELEVE FROM tmp_notes WHERE MOYENNE IS NULL GROUP BY IDELEVE HAVING COUNT(*) > 3";
         $elevesclasse = $this->query($query);
-        foreach ($elevesclasse as $el) {
-            $this->query("DELETE FROM tmp_notes WHERE IDELEVE = :ideleve", ["ideleve" => $el['IDELEVE']]);
-        }
+        //foreach ($elevesclasse as $el) {
+        //    $this->query("DELETE FROM tmp_notes WHERE IDELEVE = :ideleve", ["ideleve" => $el['IDELEVE']]);
+        //}
         return true;
         ##$this->pdo->exec("LOCK TABLES tmp_notes write;");
     }

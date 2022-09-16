@@ -36,6 +36,16 @@
 </div>
 <div class="recapitulatif"></div>
 <div class="navigation">
-    <?php echo btn_print("impression();"); ?>
+    <div class="editions" style="float: left">
+            <input type="radio" value="excel" name="type_impression" />
+            <img src="<?php echo img_excel(); ?>" />&nbsp;&nbsp;
+            <input type="radio" value="pdf" name="type_impression" checked="checked" />
+            <img src="<?php echo img_pdf(); ?>" />&nbsp;&nbsp;Editions:
+            <select onchange="imprimer();" name = "code_impression">
+                <option></option>
+                <option value="0001">Tableau d'honneur annuel</option>
+            </select>
+        </div>
+    <?php echo btn_print("impressionBulletin();"); ?>
 </div>
 <div class="status"></div>
