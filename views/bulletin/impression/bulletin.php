@@ -207,9 +207,12 @@ foreach ($rangs as $rang) {
         $moyennes[] = $rang['MOYGENERALE'];
     }
 
-    genererCourbe($moyennes, $rang, $codeperiode);
-    $courbe = SITE_ROOT . "public/tmp/" . $rang['IDELEVE'] . ".png";
-    $pdf->Image($courbe, $pdf->GetX(), $pdf->GetY(), 45, 30, '', '', 'T', false, 300, '', false, false, 0, false, false, false);
+    if(is_array($moyennes) && count($moyennes) > 0){
+        genererCourbe($moyennes, $rang, $codeperiode);
+        $courbe = SITE_ROOT . "public/tmp/" . $rang['IDELEVE'] . ".png";
+    
+        $pdf->Image($courbe, $pdf->GetX(), $pdf->GetY(), 45, 30, '', '', 'T', false, 300, '', false, false, 0, false, false, false);
+    }
     $filename = SITE_ROOT  . "public" . DS . "tmp" . DS . $rang['IDELEVE'] . ".png";
     if (file_exists($filename)) {
         try {

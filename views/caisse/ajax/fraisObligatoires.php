@@ -10,14 +10,16 @@
     <tbody>
         <?php
         $d = new DateFR();
-        foreach ($bligatoires as $f) {
+        foreach ($obligatoires as $f) {
             $d->setSource($f['DATETRANSACTION']);
-            echo "<tr><td>" . $d->getDateMessage(3) . "</td><td>" . $f['DESCRIPTION'] . "</td><td>" . $f['MONTANT'] . "</td>";
+            echo "<tr><td>" . $d->getDateMessage(3) . "</td><td>" . $f['NOM']. ' '.$f['PRENOM'] . "</td>";
+            echo "<td>" . $f['DESCRIPTION']. "</td><td>". $f['MONTANT'] . "</td>";
              if ($f['VALIDE'] == 0) {
                 echo "<td style='background-color:#ff9999' align='center'>En cours</td>";
             } else {
                 echo "<td style='background-color:#99ff99' align='center'>Valid&eacute;e</td>";
             }
+            echo '<td>';
              if(peutSupprimerEleveFraisObligatoire() && isAuth(554)){
                 echo "&nbsp;|&nbsp;<img style='cursor:pointer' src='" . SITE_ROOT . "public/img/icons/annuler.png' title='Supprimer ce payement' "
                         . "onclick='supprimerFraisObligatoire(".$f['IDELEVEFRAIS'].");' />";

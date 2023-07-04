@@ -110,7 +110,7 @@ class fraisController extends Controller {
                 break;
         }
         $frais = $this->Frais->findBy(["CLASSE" => $this->request->idclasse]);
-        $fraisobligatoires = $this->Frais->getFraisObligatoires();
+        $fraisobligatoires = $this->Frais->getFraisObligatoiresForClasse($this->request->idclasse);
         $view->Assign("frais", $frais);
         $view->Assign("fraisobligatoires", $fraisobligatoires);
         $json[0] = $view->Render("frais" . DS . "ajax" . DS . "frais", false);

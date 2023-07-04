@@ -111,6 +111,10 @@ class fraisModel extends Model {
         return $this->query("DELETE FROM frais_obligatoires WHERE IDFRAISOBLIGATOIRE = :idfrais", 
                 array("idfrais" => $idfrais));
     }
+     public function deleteEleveFraisObligatoire($idelevefrais){
+        return $this->query("DELETE FROM eleve_frais_obligatoire WHERE IDELEVEFRAIS = :idfrais", 
+                array("idfrais" => $idelevefrais));
+    }
     public function updateFraisObligatoire($params, $idfrais){
         $sql = "UPDATE frais_obligatoires SET DESCRIPTION = :description, CLASSE = :classe, "
                 . "MONTANT = :montant, CODEFRAIS = :codefrais "
@@ -156,8 +160,9 @@ class fraisModel extends Model {
         $params =  array("eleve" => $ideleve, "periode" => $anneeacad, "codefrais" => $codefrais);
         $this->query("DELETE FROM eleve_frais_obligatoire WHERE ELEVE = :eleve AND PERIODE = :periode AND CODEFRAIS = :codefrais", 
                $params);
-        $sql = "INSERT INTO eleve_frais_obligatoire(ELEVE, CODEFRAIS, PERIODE) "
-                . "VALUES(:eleve, :codefrais, :periode)";
+        $sql = "INSERT INTO eleve_frais_obligatoire(ELEVE, CODEFRAIS, PERIODE, DATETRANSACTION) "
+                . "VALUES(:eleve, :codefrais, :periode, :datetransaction)";
+        $params["datetransaction"] = date("Y-m-d H:i:s", time());
         return $this->query($sql, $params);
     }
 

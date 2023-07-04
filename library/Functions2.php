@@ -134,7 +134,7 @@ function genererMatricule($derniereleve, $matric) {
 /**
  * Un tableau contenant les moyennes des eleves pour chaque sequences
  * 
- * @param type $moyennes = array()
+ * @param array $moyennes = array()
  */
 function genererCourbe($moyennes, $rang, $codeperiode = "S") {
     try {

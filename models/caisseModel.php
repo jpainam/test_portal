@@ -298,10 +298,12 @@ class caisseModel extends Model {
         $sql = "SELECT eo.*, el.*, fo.* "
                 . "FROM eleve_frais_obligatoire eo "
                 . "INNER JOIN eleves el ON el.IDELEVE = eo.ELEVE "
-                . "INNER JOIN frais_obligatoires fo ON fo.CODEFRAIS = eo.CODEFRAIS "
+                . "INNER JOIN inscription i ON i.IDELEVE = eo.ELEVE AND i.ANNEEACADEMIQUE = :periode2 "
+                . "INNER JOIN frais_obligatoires fo ON fo.CODEFRAIS = eo.CODEFRAIS AND fo.CLASSE = i.IDCLASSE "
                 . "WHERE eo.PERIODE = :periode AND eo.DATETRANSACTION BETWEEN :debut AND :fin";
         return $this->query($sql, array("periode" => $_SESSION['anneeacademique'], 
             "debut" => $datedebut, 
+            "periode2" => $_SESSION['anneeacademique'],
             "fin" => $datefin));
     }
 

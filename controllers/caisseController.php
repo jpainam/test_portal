@@ -376,6 +376,8 @@ class caisseController extends Controller {
                 $this->Caisse->update($params, ["idcaisse" => $this->request->idcaisse]);
                 break;
             case "supprimerFraisObligatoire":
+                $idelevefrais = $this->request->idcaisse;
+                $this->Frais->deleteEleveFraisObligatoire($idelevefrais);
                 $obligatoires = $this->Caisse->operationObligatoires($datedebut, $datefin);
                 $view->Assign("obligatoires", $obligatoires);
                 $json[0] = $view->Render("caisse" . DS . "ajax" . DS . "fraisObligatoires", false);
