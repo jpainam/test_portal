@@ -1,146 +1,173 @@
 $(document).ready(function () {
-    $("#datedebut").datepicker({
-        defaultDate: "+1w",
-        changeMonth: true,
-        changeYear: true,
-        onClose: function (selectedDate) {
-            $("#datefin").datepicker("option", "minDate", selectedDate);
-        }
-    });
-    $("#datedebut").datepicker("setDate", "-60d");
-    $("#datefin").datepicker({
-        defaultDate: "+1w",
-        changeMonth: true,
-        changeYear: true,
-        onClose: function (selectedDate) {
-            $("#datedebut").datepicker("option", "maxDate", selectedDate);
-        }
-    });
-    $("#datefin").datepicker("setDate", new Date());
-    $("input[name=datedebut], input[name=datefin]").change(filtrerOperation);
+    $("#comboClasses").change(chargerDonnees);
 
-    /*if (!$.fn.DataTable.isDataTable("#tableTotaux")) {
-        $("#tableTotaux").DataTable({
-            bInfo: false,
-            paging: false,
-            searching: false
-        });
-    }*/
-
-    $("select[name=typeoperation]").change(filtrerOperation);
 });
 
-var filtrerOperation = function () {
-
+chargerDonnees = function () {
+    if ($("select[name=comboClasses]").val() === "") {
+        return;
+    }
     $.ajax({
-        url: "./ajaxoperation",
+        url: "./classe/ajaxclasse",
         type: "POST",
         dataType: "json",
         data: {
-            datedebut: $("input[name=datedebut]").val(),
-            datefin: $("input[name=datefin]").val(),
-            filtre: $("select[name=typeoperation]").val(),
-            action: "filtrerOperation"
+            "idclasse": $("select[name=comboClasses]").val()
         },
         success: function (result) {
             $("#onglet1").html(result[0]);
             $("#onglet2").html(result[1]);
-        },
-        error: function (xhr, status, error) {
-            alert("Une erreur s'est produite " + xhr + " " + error);
-        }
-    });
-};
-
-function percuRecu(_idcaisse) {
-    $.ajax({
-        url: "./ajaxoperation",
-        type: "POST",
-        dataType: "json",
-        data: {
-            action: "percuRecu",
-            idcaisse: _idcaisse,
-            filtre: $("select[name=typeoperation]").val(),
-            datedebut: $("input[name=datedebut]").val(),
-            datefin: $("input[name=datefin]").val()
-        },
-        success: function (result) {
-            $("#onglet1").html(result[0]);
-            $("#onglet2").html(result[1]);
-        },
-        error: function (xhr, status, error) {
-            alert("Une erreur s'est produite " + xhr + " " + error);
-        }
-    });
-}
-function validerOperation(_idcaisse) {
-    $.ajax({
-        url: "./ajaxoperation",
-        type: "POST",
-        dataType: "json",
-        data: {
-            action: "validerOperation",
-            idcaisse: _idcaisse,
-            filtre: $("select[name=typeoperation]").val(),
-            datedebut: $("input[name=datedebut]").val(),
-            datefin: $("input[name=datefin]").val()
-        },
-        success: function (result) {
-            $("#onglet1").html(result[0]);
-            $("#onglet2").html(result[1]);
-
+            $("#onglet3").html(result[2]);
+            $("#onglet4").html(result[9]);
+            $("#onglet6").html(result[3]);
+            $("#prof-principal").html(result[4]);
+            $("#cpe-principal").html(result[5]);
+            $("#resp-admin").html(result[6]);
+            $("#effectif").html(result[7]);
+            $("#total-frais").html(result[8]);
+            //$("#onglet5").html(result[10]);
+            $("#nouveauxeleves").html(result[11]);
+            $("#onglet5").html(result[12]);
+			
         },
         error: function (xhr, status, error) {
             console.log(xhr.responseText);
         }
     });
-}
+};
+
 function imprimer() {
     if ($("select[name=code_impression]").val() === "") {
         return;
     }
+    removeRequiredFields([$("select[name=comboClasses]")]);
+    if ($("select[name=comboClasses]").val() === "") {
+        alertWebix(__t("Veuillez d'abord choisir une classe"));
+        addRequiredFields([$("select[name=comboClasses]")]);
+        return;
+    }
     var frm = $("<form>", {
-        action: "./imprimer",
+        action: "./classe/imprimer",
         target: "_blank",
         method: "post"
     }).append($("<input>", {
         name: "code",
         type: "hidden",
         value: $("select[name=code_impression]").val()
+    })).append($("<input>", {
+        name: "type_impression",
+        type: "hidden",
+        value: $("input[name=type_impression]:checked").val()
+    })).append($("<input>", {
+        name: "idclasse",
+        type: "hidden",
+        value: $("select[name=comboClasses]").val()
     })).appendTo("body");
+
+
+    var frais = $(".idsfrais:checked").map(function () {
+        return this.value;
+    }).get();
+
+    console.log(frais);
+
+    if ($("select[name=code_impression]").val() === "0003") {
+        frm.append($("<input>", {
+            name: "frais",
+            type: "hidden",
+            value: JSON.stringify(frais)
+        }));
+    }
     frm.submit();
 }
-function supprimerCaisse($idcaisse) {
-    var _ok = confirm('Etes-vous sûr de vouloir supprimer cette entrée de caisse?');
-    if (_ok) {
-        document.location = "./delete/" + $idcaisse;
-    }
-}
-function supprimerMoratoire($idmoratoire) {
-    var _ok = confirm('Etes-vous sûr de vouloir supprimer ce moratoire ?');
-    if (_ok) {
-        document.location = "./deletemoratoire/" + $idmoratoire;
-    }
-}
 
-function supprimerFraisObligatoire($idelevefrais){
+function envoyerRappel() {
+    if ($("select[name=comboClasses]").val() === "") {
+        return;
+    }
     $.ajax({
-        url: "./ajaxoperation",
+        url: "./classe/envoyerRappel",
         type: "POST",
         dataType: "json",
         data: {
-            action: "supprimerFraisObligatoire",
-            idcaisse: $idelevefrais,
-            filtre: $("select[name=typeoperation]").val(),
-            datedebut: $("input[name=datedebut]").val(),
-            datefin: $("input[name=datefin]").val()
+            idclasse: $("select[name=comboClasses]").val()
         },
         success: function (result) {
-            // frais obligatoires
-            $("#onglet6").html(result[0]);
-            // totaux
-            $("#onglet2").html(result[1]);
+            $("#onglet5").html(result[1]);
+            if(result[0]){
+                alertWebix(__t("Messages de rappel envoy&eacute; avec succ&egrave;s"));
+            }else{
+                alertWebix(__t("Erreur lors de l'envoi des messages de rappel"));
+            }
+        },
+        error: function (xhr, status, error) {
+            console.log(xhr.responseText);
+        }
+    });
+}
+function imprimerCompte(_ideleve) {
 
+    removeRequiredFields([$("select[name=comboClasses]")]);
+    if ($("select[name=comboClasses]").val() === "") {
+        alertWebix(__t("Veuillez d'abord choisir une classe"));
+        addRequiredFields([$("select[name=comboClasses]")]);
+        return;
+    }
+    var frm = $("<form>", {
+        action: "./eleve/imprimer",
+        target: "_blank",
+        method: "post"
+    }).append($("<input>", {
+        name: "code",
+        type: "hidden",
+        value: "0004"
+    })).append($("<input>", {
+        name: "ideleve",
+        type: "hidden",
+        value: _ideleve
+    })).appendTo("body");
+
+    frm.submit();
+
+}
+function synchroniserEmploisDuTemps(){
+    $.ajax({
+        url: "./classe/synchroniser",
+        type: "POST",
+        dataType: "json",
+        data: {
+            idclasse: $("select[name=comboClasses]").val(),
+            action: "emploisdutemps"
+        },
+        success: function (result) {
+            $("#onglet3").html(result[0]);
+            if(result[0]){
+                alertWebix(__t("Emplois du temps synchroniser avec succ&egrave;s!!!"));
+            }else{
+                alertWebix(__t("Erreur de synchronisation"));
+            }
+        },
+        error: function (xhr, status, error) {
+            console.log(xhr.responseText);
+        }
+    });
+}
+function synchroniserManuels(){
+     $.ajax({
+        url: "./classe/synchroniser",
+        type: "POST",
+        dataType: "json",
+        data: {
+            idclasse: $("select[name=comboClasses]").val(),
+            action: "manuelscolaires"
+        },
+        success: function (result) {
+            $("#onglet6").html(result[0]);
+            if(result[0]){
+                alertWebix(__t("Manuels scolaires synchronis&eacute;s avec succ&egrave;s!!!"));
+            }else{
+                alertWebix(__t("Erreur de synchronisation"));
+            }
         },
         error: function (xhr, status, error) {
             console.log(xhr.responseText);

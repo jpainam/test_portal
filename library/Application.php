@@ -67,6 +67,7 @@ class Application {
         } else {
             error_reporting(E_ALL);
             #error_reporting(E_ERROR | E_PARSE);
+            
             ini_set('display_errors', 'Off');
             ini_set('log_errors', 'On');
             ini_set('error_log', ROOT . DS . 'tmp' . DS . 'logs' . DS . 'error.log');
@@ -79,11 +80,11 @@ class Application {
     }
 
     private function remove_magic_quotes() {
-        if (get_magic_quotes_gpc()) {
+        #if (get_magic_quotes_gpc()) {
             $_GET = $this->strip_slashes_deep($_GET);
             $_POST = $this->strip_slashes_deep($_POST);
             $_COOKIE = $this->strip_slashes_deep($_COOKIE);
-        }
+        #}
     }
 
     private function unregister_globals() {

@@ -109,17 +109,23 @@ class noteController extends Controller {
     }
 
     public function validerSaisie() {
-        if (isset($this->request->deja)) {
-            header("Location:" . Router::url("note"));
+        $idenseignement = $this->request->idenseignement;
+        $idsequence = $this->request->sequence;
+        $notes = $this->Notation->findBy(["ENSEIGNEMENT" => $idenseignement, "SEQUENCE" => $idsequence]);
+        if (is_array($notes) && count($notes) > 0) {
+            $this->Notation->deleteBy(["IDNOTATION" => $notes[0]['IDNOTATION']]);
         }
+        /*if (isset($this->request->deja)) {
+            header("Location:" . Router::url("note"));
+        }*/
+
         $this->loadModel('notecontinue');
         $eleves = $this->Inscription->getInscrits($this->request->idclasse, $this->session->anneeacademique);
 
         $personnel = $this->Personnel->findSingleRowBy(["USER" => $this->session->iduser]);
 
         $datedevoir = empty($this->request->datedevoir) ? date("Y-m-d", time()) : parseDate($this->request->datedevoir);
-        $idenseignement = $this->request->idenseignement;
-        $idsequence = $this->request->sequence;
+        
         $params = ["enseignement" => $idenseignement,
             "description" => $this->request->description,
             "notesur" => $this->request->notesur,
