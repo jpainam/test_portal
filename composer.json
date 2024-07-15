@@ -1,5 +1,6 @@
 {
     "require": {
+        "php": ">=7.4",
         "phpoffice/phpspreadsheet": "^1.4",
         "google/cloud": "^0.101.1",
         "grpc/grpc": "^1.19",
