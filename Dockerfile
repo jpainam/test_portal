@@ -8,6 +8,12 @@
 
 ################################################################################
 
+
+FROM composer:latest as composer
+
+COPY --from=composer/composer:latest-bin /composer /usr/bin/composer
+
+RUN composer update
 # Create a stage for installing app dependencies defined in Composer.
 FROM composer:lts as deps
 
@@ -17,6 +23,19 @@ WORKDIR /app
 # reference your application source files, uncomment the line below to copy all the files
 # into this layer.
 # COPY . .
+
+# Add core PHP extensions, see
+# https://github.com/docker-library/docs/tree/master/php#php-core-extensions
+# This example adds the apt packages for the 'gd' extension's dependencies and then
+# installs the 'gd' extension. For additional tips on running apt-get, see
+# https://docs.docker.com/go/dockerfile-aptget-best-practices/
+RUN apk --no-cache add \
+    freetype-dev \
+    libjpeg-turbo-dev \
+    libpng-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) gd
+
 
 # Download dependencies as a separate step to take advantage of Docker's caching.
 # Leverage a bind mounts to composer.json and composer.lock to avoid having to copy them
@@ -46,18 +65,7 @@ FROM php:7.4-apache as final
 # https://github.com/docker-library/docs/tree/master/php#how-to-install-more-php-extensions
 # The following code blocks provide examples that you can edit and use.
 #
-# Add core PHP extensions, see
-# https://github.com/docker-library/docs/tree/master/php#php-core-extensions
-# This example adds the apt packages for the 'gd' extension's dependencies and then
-# installs the 'gd' extension. For additional tips on running apt-get, see
-# https://docs.docker.com/go/dockerfile-aptget-best-practices/
-# RUN apt-get update && apt-get install -y \
-#     libfreetype-dev \
-#     libjpeg62-turbo-dev \
-#     libpng-dev \
-# && rm -rf /var/lib/apt/lists/* \
-#     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-#     && docker-php-ext-install -j$(nproc) gd
+
 #
 # Add PECL extensions, see
 # https://github.com/docker-library/docs/tree/master/php#pecl-extensions
