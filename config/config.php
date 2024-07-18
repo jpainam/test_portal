@@ -13,15 +13,15 @@ define("REMOTE_SERVER", "https://www.uacosendai-edu.net/eschool/");
 	Definir par exemple
 	define('SITE_ROOT', 'http://192.168.1.103') si le serveur est distant
 */
-define('SITE_ROOT', 'https://ipw.jpainam.com');
+define('SITE_ROOT', 'http://localhost/ipw/');
 //define('SITE_ROOT', 'http://10.10.10.1/locan/');
 define('DEFAULT_CONTROLLER', "index");
 define('DEFAULT_ACTION', "index");
 
-define("DB_NAME", 'default');
+define("DB_NAME", 'ipw');
 define("DB_USER", 'root');
-define("DB_PASSWORD", "qcCuBwoy0KEchjyd2GgFPkToSnNEmSBqIVuJ0MntO9qNeNt1mM47YoU8w6133SG0");
-define("DB_HOST", 'localhost:3306');
+define("DB_PASSWORD", "");
+define("DB_HOST", 'localhost');
 
 
 /**
